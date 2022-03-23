@@ -1,5 +1,3 @@
-package nimya;
-
 import java.lang.reflect.Array;
 
 public class Sports {
