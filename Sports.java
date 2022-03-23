@@ -1,13 +1,15 @@
+package nimya;
+
 import java.lang.reflect.Array;
 
 public class Sports {
 
 	public static void main(String[] args) {
 		
-		/* INDOOR CHESS OUTDOOR FOOTBALL
+		/* INDOOR CHESS OUTDOOR KABADI
 		 * 
 		 */
-		Game chessgame		=new Game("Chess","bla bla",0,2);
+		Game chessgame		=new Game("Chess","bla bla",0,false);
 		System.out.println("Game Details "+chessgame);
 		IndoorGame chess	=new IndoorGame();
 		TeamMember[] t1		=new TeamMember[2];
@@ -20,32 +22,70 @@ public class Sports {
 		System.out.println("Arrangement Details....");
 		System.out.println(chess);
 		chessgame.startGame();
-		TeamMember.addScore(t1[0]);
-		TeamMember.addScore(t1[1]);
-		TeamMember.addScore(t1[1]);
-		chessgame.endGame(t1);
+		t1[0].addScore();
+		t1[1].addScore();
+		t1[1].addScore();
+		chessgame.whoWon(t1);
+		chessgame.endGame();
+		
+		//////KABADI
+		Game kabadiGame		=new Game("Kabadi","bla bla",0,true);
+		System.out.println("Game Details "+kabadiGame);
+		OutdoorGame kabadi	=new OutdoorGame();
+		kabadi.setLandmark("Jewel of Navi Mumbai");
+		kabadi.setReferee("Kishore Kumar");
+		kabadi.setScoreBoradOfficial("Williams");
+		kabadi.getOutdoorGame();
+		System.out.println("Contestants.....");
+		
+		TeamMember[] kt1	=new TeamMember[8];
+		Team abc				= new Team();
+		abc.setTeamCount(7);
+		abc.setTeamLeader(kt1[5]);
+		abc.setTeamName("Cubs");
+		abc.setTeampersons(kt1);
+		abc.addTeamDetails("Kabadi",kt1);		
+		
+		TeamMember[] kt2	=new TeamMember[8];
+		Team xyz			= new Team();
+		xyz.setTeamCount(7);
+		xyz.setTeamLeader(kt2[2]);
+		xyz.setTeamName("BullBulls");
+		xyz.setTeampersons(kt2);
+		xyz.addTeamDetails("Kabadi",kt2);
+		
+		kabadiGame.startGame();
+		abc.addTeamScore();
+		kt1[6].addScore();
+		xyz.addTeamScore();
+		kt2[0].addScore();
+		
+		abc.addTeamScore();
+		kt1[1].addScore();
+		kabadiGame.whoWonTeam(abc, xyz);
+		kabadiGame.endGame();
 		
 		
 	}
 }
-class Game{
+class Game {
 	private String gameName;
 	private String rules;
 	private int lastScore;
-	private int noOfTeamMembers;
+	boolean isTeamPlay;
 	private String winner;
-	public Game(String gameName, String rules,int lastScore,int noOfTeamMembers) {
+	
+	public Game(String gameName, String rules,int lastScore,boolean isTeamPlay) {
 		this.gameName = gameName;
 		this.rules = rules;
 		this.lastScore = lastScore;
-		this.noOfTeamMembers = noOfTeamMembers;
+		this.isTeamPlay = isTeamPlay;
 		
 	}
-	private void whoWon(TeamMember[] t1) {
+	public void whoWon(TeamMember[] t1) {
 		// TODO Auto-generated method stub
 		int count	= Array.getLength(t1);
 		int no,i;
-		
 		for(i=0;i<count;i++) {
 			if(lastScore<=t1[i].currScore) {
 				lastScore=t1[i].currScore;
@@ -60,8 +100,24 @@ class Game{
 		
 		System.out.println(winner+" wins the game with "+lastScore+" Point!!");
 	}
-	public void endGame(TeamMember[] t) {
-		whoWon(t);
+	
+	public void whoWonTeam(Team t1,Team t2) {
+		// TODO Auto-generated method stub
+			System.out.println(t1.getTeamName()+" : "+t1.currTeamScore+"");
+			System.out.println(t2.getTeamName()+" : "+t2.currTeamScore+"");
+			if(lastScore<=t1.currTeamScore) {
+				lastScore=t1.currTeamScore;
+				winner	=t1.getTeamName();
+				
+			}else {
+				lastScore=t2.currTeamScore;
+				winner	=t2.getTeamName();
+			}
+			
+	
+		System.out.println(winner+" wins the game with "+lastScore+" Point!!");
+	}
+	public void endGame() {
 		// TODO Auto-generated method stub
 		System.out.println("CONGRATS THE WINNER!!");
 		
@@ -77,7 +133,7 @@ class Game{
 	@Override
 	public String toString() {
 		return "Game [gamename=" + gameName + ", rules=" + rules + ", score=" + lastScore
-				+ ", noOfTeamMembers=" + noOfTeamMembers + "]";
+				+ ", isTeamPlay=" + isTeamPlay + "]";
 	}
 	
 	
@@ -110,13 +166,27 @@ class IndoorGame extends Game{
 	
 }
 class OutdoorGame extends Game{
+	String landmark;
+	String scoreBoradOfficial;
+	String referee;
+	public void getOutdoorGame() {
+		System.out.println("Arrangement Details...");
+		System.out.println("Landmark 				:"+this.landmark);
+		System.out.println("Score Borad Official 	:"+this.scoreBoradOfficial);
+		System.out.println("Referee					: "+this.referee);
+		
+	}
+	public void setLandmark(String landmark) {
+		this.landmark = landmark;
+	}
+	public void setScoreBoradOfficial(String scoreBoradOfficial) {
+		this.scoreBoradOfficial = scoreBoradOfficial;
+	}
+	public void setReferee(String referee) {
+		this.referee = referee;
+	}
 	
-}
-class Team extends TeamMember{
-	int teamCount;
-	private TeamMember teamLeader=new TeamMember();
-	private TeamMember[] contestant=new TeamMember[teamCount]; 
-	int highScore;
+	
 }
 class TeamMember{
 	
@@ -124,7 +194,9 @@ class TeamMember{
 	int contAge;
 	int currScore;
 	String contGame;
-	
+	TeamMember(){
+		
+	}
 	public TeamMember(String contName, int contAge, int currScore, String contGame) {
 		super();
 		this.contName = contName;
@@ -138,9 +210,56 @@ class TeamMember{
 		return "TeamMember [contName=" + contName + ", contAge=" + contAge + ", currScore=" + currScore
 				+ ", contGame=" + contGame + "]";
 	}
-	public static void addScore(TeamMember teamMember) {
+	public void addScore() {
 		// TODO Auto-generated method stub
-		teamMember.currScore+=1;
+		currScore+=1;
 		
 	}
+}
+class Team extends TeamMember{
+	private int teamCount;
+	private String teamName;
+	TeamMember[] teampersons;
+	TeamMember teamLeader;
+	int currTeamScore=0;
+	Team(){}
+	public int getTeamCount() {
+		return teamCount;
+	}
+	public void addTeamScore() {
+		// TODO Auto-generated method stub
+		currTeamScore+=1;
+		
+	}
+	public void addTeamDetails(String gameName, TeamMember[] kt1) {
+		// TODO Auto-generated method stub
+		System.out.println("Team :"+this.teamName);
+		int count	=Array.getLength(kt1);
+		for(int i=0;i<count;i++) {
+			kt1[i] =new TeamMember(this.teamName+" "+(i+1), 15, 0, gameName);
+			System.out.println(" "+kt1[i]);
+		}
+	}
+	public void setTeamCount(int teamCount) {
+		this.teamCount = teamCount;
+	}
+	public String getTeamName() {
+		return teamName;
+	}
+	public void setTeamName(String teamName) {
+		this.teamName = teamName;
+	}
+	public TeamMember[] getTeampersons() {
+		return teampersons;
+	}
+	public void setTeampersons(TeamMember[] teampersons) {
+		this.teampersons = teampersons;
+	}
+	public TeamMember getTeamLeader() {
+		return teamLeader;
+	}
+	public void setTeamLeader(TeamMember teamLeader) {
+		this.teamLeader = teamLeader;
+	}
+	
 }
