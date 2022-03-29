@@ -1,4 +1,4 @@
-package multithreadtest;
+package multithreading;
 
 import java.util.Arrays;
 
@@ -7,8 +7,8 @@ public class MultiThreadTest {
 	 * Players Chair Game Play Song When stop Song occupy seat If not get seat
 	 * person out remove chair
 	 */
-	public static void main(String[] args) {
-		ChairGame cgame = new ChairGame(15);
+	public static void main(String[] args) throws HumanAgeException, NegativeageException {
+		ChairGame cgame = new ChairGame(5);
 		// set Players
 		cgame.setPlayers();
 		Music song = new Music();
@@ -34,22 +34,21 @@ abstract class Person {
 	String name;
 	int age;
 	char gender;
-
+	Person(String name, int age, char gender){
+		this.name = name;
+		this.age = age;
+		this.gender = gender;
+	}
 	abstract void play();
 }
 
 class Player extends Person implements Runnable {
-	Player(String name, int age, char gender) {
-		this.name = name;
-		this.age = age;
-		this.gender = gender;
+	Player(String name, int age, char gender) throws HumanAgeException,NegativeageException {
+		super(name, age,  gender);
 		play();
 
 	}
 
-	Player() {
-
-	}
 
 	@Override
 	void play() {
@@ -127,6 +126,8 @@ class ChairGame {
 			System.out.println("No such Player");
 		} catch (NullPointerException e) {
 			System.out.println("No such Player");
+		} catch(ArrayIndexOutOfBoundsException e) {
+			System.out.println("Some error in Player List");
 		}
 
 	}
@@ -150,7 +151,7 @@ class ChairGame {
 		return pendingChairs;
 	}
 
-	public void setPlayers() {
+	public void setPlayers() throws HumanAgeException, NegativeageException {
 		int count = this.getNumberofPlayers();
 		players = new Player[count];
 		chairs = new Chair[count - 1];
@@ -194,4 +195,19 @@ class NoPlayerException extends RuntimeException {
 	NoPlayerException(String str) {
 		super(str);
 	}
+}
+class HumanAgeException extends Exception{
+	HumanAgeException(String str){
+		super(str);
+	}	
+}
+class NegativeageException extends Exception{
+	NegativeageException(String str){
+		super(str);
+	}	
+}
+class NameException extends Exception{
+	NameException(String str){
+		super(str);
+	}	
 }
