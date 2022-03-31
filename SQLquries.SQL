@@ -1,0 +1,13 @@
+CREATE TABLE EMP1 (
+ EMPNO               int NOT NULL PRIMARY KEY,
+ ENAME               VARCHAR(10) NOT NULL ,
+GENDER CHAR(1) DEFAULT 'F',
+EMAIL CHAR(20) NOT NULL UNIQUE,
+ JOB                 VARCHAR(9) CHECK(JOB IN ('CLERK','SALESMAN','MANAGER','PRESIDENT','ANALYST')),
+ MGR                 int REFERENCES EMP1(EMPNO),
+ HIREDATE            DATE CHECK (HIREDATE >'2021-1-1'),
+ SAL                 int CHECK( SAL>500),
+ COMM                int CHECK(COMM>100),
+ DEPTNO              int
+);
+
