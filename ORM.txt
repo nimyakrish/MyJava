@@ -1,0 +1,57 @@
+ORM == OBJECT RELATIONAL MAPPING
+=====================================
+A technique for converting data between Java objects and relational databases. 
+ORM converts data between two incompatible type systems (Java and MySQL), 
+Each model class becomes a table in database and each instance a row of the table.
+While mapping we have to consider the data, type of data and its relations with its self-entity or entity in any other table.
+
+we need 2 components
+API , OBJECT RELATIOAL MAPPER
+
+API - JPA - JAVA PERSISTENCE API -it uses data layers
+
+features of ORM
+1. provides high level API
+2.It is highly stable and eminent. Used by many industrial programmers.
+3.Help to write persistence classes using object oriented classes. Uses meta data format for mapping 
+4.It has many fetching techniques and hopeful locking techniques.
+5. support for mapping complex domain object model
+
+
+ORM architecture.
+===========================
+Object Relational Mapping
+
+3 PHASES
+
+Phase1 - OBJECT DATA PHASE
+-------------------------------
+This contains POJO classes, service interfaces and classes. 
+It is the main business component layer, which has business logic operations and attributes.
+
+POJO clasess
+DAO/service classess
+
+Phase 2 -MAPPPING OR PERSISTAENCE PHASE
+--------------------------------------------
+This contains JPA provider, mapping file (ORM.xml), JPA Loader, and Object Grid.
+
+JPA Provider : The vendor product which contains JPA flavor (javax.persistence). For example Eclipselink, Toplink, Hibernate, etc.
+
+Mapping file : The mapping file (ORM.xml) contains mapping configuration between the data in a POJO class and data in a relational database.
+
+JPA Loader : 	The JPA loader works like cache memory, which can load the relational grid data.
+		 It works like a copy of database to interact with service classes for POJO data (Attributes of POJO class).
+
+Object Grid : The Object grid is a temporary location which can store the copy of relational data, i.e. like a cache memory. 
+		All queries against the database is first effected on the data in the object grid. Only after it is committed, it effects the main database.
+
+Phase 3 - RELATIONAL DATA PHASE
+---------------------
+It contains the relational data which is logically connected to the business component. 
+only when the business component commit the data, it is stored into the database physically. 
+Until then the modified data is stored in a cache memory as a grid format. Same is the process for obtaining data.
+
+
+The mechanism of the programmatic interaction of above three phases is called as object relational mapping.
+
